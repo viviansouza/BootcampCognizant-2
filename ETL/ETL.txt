@@ -1,0 +1,23 @@
+ETL
+
+Extração -> Transformação -> Carregamento
+
+Extração - permite que os dados sejam extraídos da mais diversas fontes de dados. Ex: arquivos, APIs, bases de dados, tempo real.
+Transformação - dados são propagados para a área de preparação de dados, onde são transformados e limpos.
+Carregamento - Load - carregados no DW ou outra fonte de depósito de dados.
+
+Por que precisamos?
+
+Os dados devem ser extraídos e trabalhados de forma organizada e carregados de forma íntegra.
+Dados: batch e real time
+
+Ferramentas/Pacotes para Python
+
+Apache Airflow - ferramenta de gerenciamento de workflows.
+Luigi - pacote que permite a contrução de ferramentas de visualização e recuperação de falhar. Interface por linha de comando.
+bonobo - kit de ferramentas de processamento para trabalhar com ETL em Python de forma rápida. Processos em paralelo e dados extraídos de várias fontes.
+bubbles - ferramenta para processar, auditar e inspecionar dados. Transparência no processo de ETL.
+petl - pacote ETL de uso geral. Fácil para trabalhar. Não é usado em pipelines muito grandes.
+pandas - conjunto de dataframes que pode ser utilizado com uma maior massa de dados. Muito difundido.
+
+

@@ -1,0 +1,172 @@
+NoSql
+not Only Sql (não apenas sql)
+
+Diferenças BD Relacional e NoSQL
+Escalabililidade horizontal. Particionando dados(sharding) entre os nós é o mais conhecido.
+Maior desempenho na aplicação
+
+Depende do tamanho do clustrer e latência da rede para melhor performance.
+
+Características e vantagens
+Flexibilidade, escalabilidade e alta performance.
+
+Podem ser:
+1. Baseados a documentos
+2. Chaves e valor
+3. Orientado a coluna
+4. Orientado a grafos
+
+4. Como para redes sociais, detecção de fraudes, games, etc. Ex: Neo4j.
+
+CREATE (:Cliente {name: "Maricota", idade:17, hobbies:["Morder o urso de pelúcia, dormir e comer"]})
+
+MATCH (Maricota) RETURN Maricota
+
+CREATE (:Cliente {nome: "Liloca", idade: 12, hobbies: ["Brincar"]}) -[:Bloqueado]->(:Cliente {nome:"Lilica",hobbies:["Procurar galhos"] })
+
+(Criou duas labels, dois nós)
+
+MATCH(todos) RETURN todos
+
+MATCH(Lilica:Cliente {nome: "Lilica"})-[relaciona:Bloqueado]-() DELETE relaciona
+(excluir os relacionamentos)
+
+
+3. Armazenam as informações exatamente em suas colunas de forma independentes entre elas.
+Chave, valor e timestamp. Ex: Cassandra
+
+Recomendações: Volume maior de leitura do que escrita, consultas por chaves-primárias.
+
+Keyspace: agrupamento de famílias de colunas.
+Colunm Family: agrupamento de colunas
+Row Key: chave que representa uma linha de coluna
+Column: representa um valor contendo: Name, Value Timestamp
+
+Usando o Cassandra
+
+CREATE KEYSPACE fenda_biquini WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};
+
+user fenda_biquini;
+
+CREATE COLUMNFAMILY cliente {name TEXT PRIMARY KEY, age int};
+SELECT * FROM cliente
+
+INSERT INTO cliente {name, age} VALUES {'Bob Esponja, 38};
+
+SELECT * FROM cliente;
+
+INSERT INTO cliente JSON '{'name':'Patrick'};
+
+//Consultar timestamp do valor nulo da coluna age de Patrick
+
+SELECT age, WRITETIME(age) FROM cliente;
+
+SELECT * FROM cliente WHERE name = 'Bob Esponja';
+
+SELECT JSON * from clientes;
+
+UPDATE cliente SET age=33 WHERE name='Patrick';
+
+ALTER COLUMNFAMILY cliente ADD hobby text;
+
+2. Constituído por duas partes - chave única e valor
+Bom desempenho em aplicações na nuvem e menor capacidade de busca. Uso: cache, sessão usuário, carrinho de compras
+
+
+2. Chave e valor (continuação)
+
+Ex: Redis (cache, mensageria e fila)
+
+Alto desempenho, estrutura de dados na memória, versatilidade, replicação e persistência.
+
+Busca ela chave
+
+SET user1:name "Bob esponja"
+GET user1:name
+LINDEX user1:hobbie 0 (fazer busca pelo índice)
+
+
+EX e PX
+Expiração de registro
+
+
+Listar todos os valores da lista ou pegar intervalo específico:
+
+LRANGE user1:hobbies 0 1 (retorna dois valores)
+
+1. Documento
+Dados e documentos autocontidos e autodescritivos
+Livre de esquemas podendo usar JSON, XML, entre outros.
+Ex: MongoDB
+
+
+
+MongoDB
+
+Código aberto, alta performance e Schema-free.
+Utilizar JSON para armazenar dados
+Suporte e índices
+Auto-Sharding(escalamento horizontal)
+Mad-Reduce(ferramenta de consulta e agregação)
+GridFS(armazenamento de arquivos)
+
+Document ==>Tupla/Registro
+
+Collection==> Tabela
+Embedding/linkng==>Join
+
+Quando usar: grande volumes de dados.
+Dados não necessariamente estruturados.
+
+Quando não usar:
+Necessidade de relacionamentos/joins
+Propriedades ACID e transações são importantes
+
+Schema Design
+Embedding vs Referência
+
+Documentos autocontidos
+MongoDB não tem uma Foreng Key
+
+Prós:
+	Consulta de informações em uma única query
+	Atualiza  registro em uma única operação
+Contras:
+	Limite de 16MB por documento
+
+Referência
+Prós:
+	Documentos pequenos
+	Não duplica informações
+	Usado quando os dados não são acessados em todas as consultas.
+Contras:
+	Duas ou mais queries ou utilização de $lookup
+
+Recomendações de acordo com os relacionamentos
+
+
+One-to-one: prefira atributos chave-valor no documento
+
+{
+"_id" : ObjectId("609aeec3aa1a68ca982b47d7"),
+"name": "Patrick 2"
+"street": "Av das conchas"
+"number": 102
+}
+	
+
+One-to-few: prefira embedding
+{
+"_id" : ObjectId("609aeec3aa1a68ca982b47d7"),
+"name": "Patrick 2"
+"addresses":[
+        {"street": "Av das conchas","number": 102}
+        {"street": "Av das conchas","number": 100}
+     ]
+}
+
+One-to-many e Many-to-many: prefira referência
+
+
+Armazena os seus dados utiizando BSON
+
